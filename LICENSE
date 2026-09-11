@@ -1,0 +1,14 @@
+The map in this repository's releases is a derivative database of
+OpenStreetMap and is licensed under the Open Database License (ODbL) v1.0.
+
+    Map data © OpenStreetMap contributors, ODbL 1.0.
+    https://opendatacommons.org/licenses/odbl/1-0/
+
+Bathymetry is derived from GEBCO 2026 (British Oceanographic Data Centre),
+free to use with the source named.
+
+Population and employment figures come from Rosstat, the 2020 Russian census
+and Petrostat, official statistics published for free use. ATTRIBUTION.md
+lists every source with the address it was taken from.
+
+The text of the README files is by SindieFox.
