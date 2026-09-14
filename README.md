@@ -62,6 +62,8 @@ On top of that, 2,150 attraction points carrying 1.39 million trips a day:
 | Railway terminals | 5 | 58,500 |
 | Shopping centres | 11 | 51,795 |
 | Theatres and concert halls | 71 | 36,990 |
+| Libraries, heritage sites, places of worship, sport | 259 | 73,935 |
+| **Total** | **2,150** | **1,386,495** |
 
 The game's demand model has no time axis, so the map has to pick a day, and it
 picks **a weekday in late September**: universities and schools in session,
