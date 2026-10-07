@@ -17,82 +17,96 @@ it costs to cross it.
 
 ## Install
 
-Through [Railyard](https://github.com/Subway-Builder-Modded), the mod manager:
-find **Санкт-Петербург (Saint Petersburg)** in the catalogue and install it.
+Use [Railyard](https://github.com/Subway-Builder-Modded), the mod manager:
+find **Санкт-Петербург (Saint Petersburg)** in its catalogue.
 
-By hand: download `SPB-0.14.0.zip` from [Releases](../../releases), unpack it,
-put `SPB.pmtiles` in the game's `tiles/` folder and everything else in
-`cities/data/SPB/`.
+For a manual install, download `SPB-0.15.0.zip` from [Releases](../../releases).
+Put `SPB.pmtiles` and `SPB_foundations.pmtiles` in the game's `tiles/` folder
+and the remaining files in `cities/data/SPB/`.
 
 ## What is in it
 
 | | |
-|---|---|
+|---|---:|
 | Playable area | 5,887 km² (73 × 81 km) |
-| Municipalities | 283 municipal units |
-| Residents | 6,790,069 |
-| Jobs | 2,773,251 |
-| Demand points | 30,815 |
-| Demand links | 152,778, of which 121,967 home–work |
-| Buildings | 954,473 |
-| Median commute | 16.3 min / 9.4 km at 35 km/h |
+| Municipalities | 283 |
+| Residents in housing layer | 6,839,575 |
+| Modelled workplaces in frame | 3,787,103 |
+| Demand points | 33,236 |
+| Demand links | 162,475, including 129,257 commute links |
+| Game `population` value | 5,236,483 |
+| Median modelled road route | 16.4 min / 9.5 km |
+
+The game's `population` field sums the sizes of demand links on the chosen day.
+It is **not a count of distinct residents**: someone can commute and visit a
+shop on the same day. The housing layer contains 6,839,575 residents.
 
 Also inside the frame: Kronstadt, Peterhof, Lomonosov, Sestroretsk, Zelenogorsk,
 Pushkin, Pavlovsk, Kolpino, Gatchina, Vsevolozhsk, Murino, Kudrovo, Sertolovo,
 Toksovo.
 
-## Demand
+## Demand and method
 
-Residents come from the Rosstat municipal database and are spread over 210,660
-building footprints: by flat count where OSM has it, by floor area and building
-type everywhere else. Jobs come from the same database, weighted by a sector
-profile. The commuting matrix is a gravity model balanced against the 2020
-census.
+Residents are placed in buildings from Rosstat municipal totals, flat counts,
+floor area and building type. The Saint Petersburg total of **employed
+residents** is anchored to 3,215,900 in [Petrostat's 2025 labour force survey](https://78.rosstat.gov.ru/folder/32168).
+Workplaces use a different measure, **employment by place of work**:
+[the 2024 labour resources balance](https://78.rosstat.gov.ru/storage/mediabank/11000125.pdf)
+reports 3,417,900 for the city; 3,416,006 are placed inside the map's city
+frame. Observed employees of larger organisations are supplemented by a modelled
+remainder that covers small businesses, sole proprietors, self-employment, and
+differences in coverage and year. The allocation to individual buildings is an
+estimate.
 
-On top of that, 2,150 attraction points carrying 1.39 million trips a day:
+The home-to-work matrix balances employed residents and workplaces. The former
+practice of scaling all commutes to the full resident population has been removed.
+An estimated 48,303 employed residents of the oblast portion work beyond the
+map frame; their local origins have not been observed directly.
 
-| | points | daily |
+The map adds 2,150 attraction points and 1,449,966 visits for a weekday in late
+September. Every planned visit is present in the game file:
+
+| | points | visits |
 |---|---:|---:|
-| Schools | 1,177 | 644,625 |
-| Universities | 214 | 220,995 |
-| Parks | 244 | 99,990 |
-| Museums | 33 | 74,700 |
-| Hospitals | 135 | 64,845 |
-| Pulkovo airport | 1 | 60,120 |
-| Railway terminals | 5 | 58,500 |
-| Shopping centres | 11 | 51,795 |
-| Theatres and concert halls | 71 | 36,990 |
-| Libraries, heritage sites, places of worship, sport | 259 | 73,935 |
-| **Total** | **2,150** | **1,386,495** |
+| Schools | 1,177 | 673,602 |
+| Universities | 214 | 229,474 |
+| Parks | 244 | 109,590 |
+| Museums | 33 | 76,772 |
+| Hospitals | 135 | 68,492 |
+| Pulkovo airport | 1 | 60,123 |
+| Railway terminals | 5 | 58,630 |
+| Shopping centres | 11 | 52,053 |
+| Theatres and concert halls | 71 | 38,573 |
+| Other attractions | 259 | 82,657 |
+| **Total** | **2,150** | **1,449,966** |
 
-The game's demand model has no time axis, so the map has to pick a day, and it
-picks **a weekday in late September**: universities and schools in session,
-tourism still high, the dacha season over. A year-average would describe a day
-that never happens.
+Only an estimated external share of the five railway terminals' traffic is
+added; journeys from Gatchina, Pushkin and Vsevolozhsk are already modelled
+within the map. The game has no time axis, so these visits do not form full
+home–work–shop–home trip chains.
 
-The five railway terminals deserve a mention. The registry's special-demand
-vocabulary has no category for intercity rail, so they go in as generic external
-demand, and in Petersburg they decide a lot: Baltiysky is the second-busiest
-terminal in the city and carries no long-distance trains at all, only suburban
-traffic.
-
-## How it was checked
-
-Every layer is built from one official source and then checked against a
-different one, so a mistake in the source cannot confirm itself.
+## Checks and limitations
 
 | layer | check | result |
 |---|---|---|
-| Residents | sums per district against Petrostat | 5,689,116 modelled against 5,652,922 published |
-| Residents | persons per flat, 3,616 buildings with `building:flats` | 2.10 against a household size of ~2.1 |
-| Jobs | total inside the city limits | 2,536,953 against 2,561,555 in the 2020 census |
-| Jobs | jobs per employed resident | 1.01 against 1.03 in the census |
-| Commuting | oblast-to-city flow | 191,737 against 154,675 in the census |
-| Travel times | median door-to-door speed | 35 km/h, against 33 in vanilla Paris |
+| Residents | district sums against Petrostat | 5,689,116 modelled against 5,652,922 published |
+| Employed residents | 2025 labour force survey, city | 3,215,900 modelled and published |
+| Jobs | 2024 labour balance, city | 3,416,006 in frame against 3,417,900 citywide |
+| Demand | link and point sums | 3,786,517 commute visits plus 1,449,966 attraction visits |
+| Routes | OSM road graph | paths found for all 162,475 links |
 
-The commuting overshoot has an explanation. The census is from 2020 and the
-population here is 2025, and in those years Murino grew from 74 to 117 thousand
-and Kudrovo almost doubled.
+The [city transport committee](https://www.gov.spb.ru/gov/otrasl/c_transport/news/310977/)
+reports 669.3 million metro boardings, over 775 million bus boardings and over
+285 million tram and trolleybus boardings in 2025. Boardings are not unique
+journeys: transfers count again. No verified contemporary citywide total of car
+trips was available, so annual boardings were not used as a simple multiplier
+for the map. Comparable station-entry counts have not yet been checked. The
+geography of small settlements and individual buildings is less certain than
+the regional totals.
+
+More detail: [methodology and limitations](METHODOLOGY.md),
+[sources and licences](ATTRIBUTION.md),
+[0.15.0 release notes](../../releases/tag/v0.15.0).
 
 ## The map
 
